@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SignIn from "./component/SignIn";
 import ChatRoom from "./component/ChatRoom";
+import Room from "./component/Room";
 import { cookies } from "./component/Cookies";
 
 
@@ -15,7 +16,8 @@ function App() {
   }
   return (
     <div>
-        <ChatRoom setIsAuth = {setIsAuth}/>
+        {/* <ChatRoom setIsAuth = {setIsAuth}/> */}
+        <Room setIsAuth = {setIsAuth}/>
     </div>
   )
   

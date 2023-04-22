@@ -4,12 +4,11 @@ import { signOut } from 'firebase/auth'
 import { useEffect, useState } from 'react';
 import { collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore';
 
-function SildeBar( {setIsAuth} ) {
+function SildeBar( {setIsAuth,room} ) {
     const [users, setUsers] = useState([])
-    const [docId, setDocId] = useState("")
 
     useEffect( () =>{
-        const q = query(collection(db, 'users'), where("room", "==", "myroom"))
+        const q = query(collection(db, 'users'), where("room", "==", `${room}`))
         onSnapshot(q, (snapshot) => {
             let users1 = []
             snapshot.forEach((doc) => {
@@ -59,10 +58,6 @@ function SildeBar( {setIsAuth} ) {
                             </li>
                         )
                     } )}
-                    {/* <li className="mt-[5px]">Trần Như Ý</li>
-                    <li className="mt-[5px]">Hoàng Minh Tường</li>
-                    <li className="mt-[5px]">Trần Tiến Phát</li>
-                    <li className="mt-[5px]">Cao Hoàng Thiện</li> */}
                 </ul>
             </div>
         </div>

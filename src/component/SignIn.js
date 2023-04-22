@@ -13,12 +13,12 @@ function SignIn( {setIsAuth} ) {
             setIsAuth(true)
             cookies.set("auth-token", result.user.refreshToken)
             console.log(result)
-            await setDoc(doc(db,"users", auth.currentUser.uid), {
-                uid: user.uid,
-                name: auth.currentUser.displayName,
-                photoUrl: auth.currentUser.photoURL,
-                room: "myroom"
-            })
+            // await setDoc(doc(db,"users", auth.currentUser.uid), {
+            //     uid: user.uid,
+            //     name: auth.currentUser.displayName,
+            //     photoUrl: auth.currentUser.photoURL,
+            //     room: "myroom"
+            // })
         })
         .catch((error) => {
             const errorCode = error.code

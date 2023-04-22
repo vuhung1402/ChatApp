@@ -2,12 +2,12 @@ import { useEffect, useState } from "react"
 import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy} from 'firebase/firestore'
 import { auth, db } from "../firebase-config"
 
-function Chat() {
+function Chat( {room} ) {
     const [newMessage, setNewMessage] = useState("")
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
-        const queryMessages = query(collection(db, "message"), where("room", "==", "myroom"), orderBy("createdAt"))
+        const queryMessages = query(collection(db, "message"), where("room", "==", `${room}`), orderBy("createdAt"))
         onSnapshot(queryMessages, (snapshot) => {
             let messages1 = [];
             snapshot.forEach((doc) => {
@@ -25,9 +25,11 @@ function Chat() {
                 text: newMessage,
                 createdAt: serverTimestamp(),
                 user: auth.currentUser.displayName,
-                room: "myroom"
+                room: room
             })
             await setNewMessage("")
+            document.querySelector(".boxchat").scrollTop = 0;
+            console.log(document.querySelector(".boxchat"))
         }
     }
 
@@ -35,10 +37,10 @@ function Chat() {
         <div className="w-3/4 max-h-screen">
             <div className="h-[10%] border-b-[0.5px] border-slate-400 px-[10px] py-[5px]">
                 <p className="font-bold">My room</p>
-                <p className="text-sm">Anh em 76</p>
+                <p className="text-sm">{room}</p>
             </div>
             <div className="h-[90%]">
-                <div className="h-[90%] border-b-[0.5px] border-slate-400  px-[10px] overflow-y-scroll overscroll-y-auto">
+                <div className="boxchat h-[90%] border-b-[0.5px] border-slate-400  px-[10px] overflow-y-scroll overscroll-y-auto">
                     {messages.map((message) => {
                         if( auth.currentUser.displayName === message.user){
                             return(
