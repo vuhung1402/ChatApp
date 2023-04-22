@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy} from 'firebase/firestore'
 import { auth, db } from "../firebase-config"
 
 function Chat( {room} ) {
     const [newMessage, setNewMessage] = useState("")
     const [messages, setMessages] = useState([])
+    const messageRef = useRef()
 
     useEffect(() => {
         const queryMessages = query(collection(db, "message"), where("room", "==", `${room}`), orderBy("createdAt"))
@@ -28,8 +29,7 @@ function Chat( {room} ) {
                 room: room
             })
             await setNewMessage("")
-            document.querySelector(".boxchat").scrollTop = 0;
-            console.log(document.querySelector(".boxchat"))
+            messageRef.current?.scrollIntoView()
         }
     }
 
@@ -40,7 +40,7 @@ function Chat( {room} ) {
                 <p className="text-sm">{room}</p>
             </div>
             <div className="h-[90%]">
-                <div className="boxchat h-[90%] border-b-[0.5px] border-slate-400  px-[10px] overflow-y-scroll overscroll-y-auto">
+                <div className="h-[90%] border-b-[0.5px] border-slate-400  px-[10px] overflow-y-scroll overscroll-y-auto">
                     {messages.map((message) => {
                         if( auth.currentUser.displayName === message.user){
                             return(
@@ -60,6 +60,7 @@ function Chat( {room} ) {
                             </div>
                         )
                     })}
+                    <div ref={messageRef}></div>
                 </div>
                 <div className="h-[10%] px-[10px] flex justify-around items-center">
                     <input
